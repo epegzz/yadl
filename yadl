@@ -1,0 +1,70 @@
+#!/bin/zsh
+###############
+#
+# YADL - Youtube Audio Downloader
+# Author: Daniel Schaefer <epegzz@gmail.com>
+#
+# REQUIRES:
+#   zsh
+#   youtube-dl
+#   id3v2
+#
+# INSTALL:
+#   simply put this file into a folder which is in your $PATH
+#   and make sure it is executable:
+#
+#   sudo wget https://github.com/epegzz/yadl/blob/master/yadl -O /usr/local/bin/yadl
+#   chmod +x /usr/local/bin/yadl
+#
+# USAGE:
+#
+#  yadl http://youtube.com/watch?v=yourvideoid
+#
+# yadl will automatically guess artist and title of the song and will
+# extract an mp3 file which will be stored in a directory of your choice.
+#
+# Put this into your ~/.zshrc in order to set a default download folder:
+#
+#  export YOUTUBE_DOWNLOAD_PATH=/Path/to/your/Music
+#
+# This script may only be use to download songs you're legally allowed to.
+# E.g. your own files, songs in the public domain or songs where the artist provides a
+# permitting license (creative commons for example).
+
+local URL="$1"
+local TITLE="$(youtube-dl -s --get-title $URL)"
+local DL_PATH
+
+if [[ ! -e $(which youtube-dl) ]]; then
+    echo '[ERROR] youtube-dl not installed!'
+    exit 1
+fi
+if [[ ! -e $(which id3v2) ]]; then
+    echo '[ERROR] id3v2 not installed!'
+    exit 1
+fi
+
+if [[ -n $YOUTUBE_DOWNLOAD_PATH && -e $YOUTUBE_DOWNLOAD_PATH ]]; then
+    DL_PATH="$YOUTUBE_DOWNLOAD_PATH"
+else
+    DL_PATH="$(pwd)"
+fi
+
+local song_artist="$(echo $TITLE | awk -F'-' '{print $1}' | sed 's/ *$//g' | sed 's/^ *//g')"
+local song_title="$(echo $TITLE | awk -F'-' '{print $2}' | sed 's/ *$//g' | sed 's/^ *//g')"
+
+vared -p 'artist: ' song_artist
+vared -p 'title: ' song_title
+vared -p 'download folder: ' DL_PATH
+
+local DL_FILENAME="$DL_PATH/${song_artist} - ${song_title}.%(ext)s"
+local FILENAME="${song_artist} - ${song_title}.mp3"
+
+youtube-dl $URL \
+    --extract-audio \
+    --audio-format mp3 \
+    --output "$DL_FILENAME"
+
+print "setting id3 tag infos"
+id3v2 -a "${song_artist}" -t "${song_title}" "$DL_PATH/$FILENAME"
+
