@@ -30,7 +30,7 @@ extract an mp3 file which will be stored in a directory of your choice.
 
 Put this into your ~/.zshrc in order to set a default download folder:
 
- export YOUTUBE_DOWNLOAD_PATH=/Path/to/your/Music
+ `export YOUTUBE_DOWNLOAD_PATH=/Path/to/your/Music`
 
 
 COPYRIGHT
