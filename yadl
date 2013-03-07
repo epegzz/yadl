@@ -4,19 +4,24 @@
 # YADL - Youtube Audio Downloader
 # Author: Daniel Schaefer <epegzz@gmail.com>
 #
-# REQUIRES:
-#   zsh
-#   youtube-dl
-#   id3v2
+# REQUIRES
+# --------
 #
-# INSTALL:
-#   simply put this file into a folder which is in your $PATH
+#   * zsh
+#   * youtube-dl
+#   * id3v2
+#
+# INSTALL
+# -------
+#
+#   simply put this file into any folder that is in your $PATH
 #   and make sure it is executable:
 #
-#   sudo wget https://github.com/epegzz/yadl/blob/master/yadl -O /usr/local/bin/yadl
-#   chmod +x /usr/local/bin/yadl
+#    sudo wget https://github.com/epegzz/yadl/blob/master/yadl -O /usr/local/bin/yadl
+#    chmod +x /usr/local/bin/yadl
 #
-# USAGE:
+# USAGE
+# -----
 #
 #  yadl http://youtube.com/watch?v=yourvideoid
 #
@@ -27,9 +32,15 @@
 #
 #  export YOUTUBE_DOWNLOAD_PATH=/Path/to/your/Music
 #
-# This script may only be use to download songs you're legally allowed to.
-# E.g. your own files, songs in the public domain or songs where the artist provides a
-# permitting license (creative commons for example).
+# COPYRIGHT
+# ---------
+#
+# yadl is released into the public domain.
+#
+# NOTE: This script is intended to only be used to download songs you're legally allowed to.
+# E.g. your own files, songs in the public domain or songs where the copyright holder of the song
+# provides a permitting license (creative commons for example).
+#
 
 local URL="$1"
 local TITLE="$(youtube-dl -s --get-title $URL)"
